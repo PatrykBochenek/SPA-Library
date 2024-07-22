@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto p-4">
+    <div class="container mx-auto p-4" v-if="book">
       <h1 class="text-2xl font-bold mb-4">{{ book.title }}</h1>
       <p class="mb-2"><strong>Author:</strong> {{ book.author }}</p>
       <p class="mb-4"><strong>Status:</strong> {{ book.is_available ? 'Available' : 'Checked out' }}</p>
@@ -54,6 +54,7 @@
           this.book = response.data;
         } catch (error) {
           console.error('Error fetching book:', error);
+          this.book = {};
         }
       },
       async fetchReaders() {
