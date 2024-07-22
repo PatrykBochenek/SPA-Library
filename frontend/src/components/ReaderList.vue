@@ -16,8 +16,8 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{ reader.name }}</td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                     <ul class="list-disc pl-5">
-                      <li v-for="book in reader.books" :key="book.id" class="mb-2">
-                        <a @click="viewBook(book.id)" href="#" class="text-blue-600 hover:text-blue-800">
+                      <li v-for="book in reader.books_taken" :key="book.id" class="mb-2">
+                        <a @click.prevent="viewBook(book.id)" href="#" class="text-blue-600 hover:text-blue-800">
                           {{ book.title }}
                         </a>
                       </li>
@@ -72,4 +72,9 @@
   };
   </script>
   
+  <style scoped>
+  .container {
+    max-width: 800px;
+  }
+  </style>
   
