@@ -1,11 +1,38 @@
 <template>
-    <div>
-      <h1 class="text-2xl font-bold mb-4">Book List</h1>
-      <ul class="list-disc pl-5">
-        <li v-for="book in books" :key="book.id" class="mb-2">
-          {{ book.title }}
-        </li>
-      </ul>
+    <div class="flex flex-col">
+      <div class="-m-1.5 overflow-x-auto">
+        <div class="p-1.5 min-w-full inline-block align-middle">
+          <div class="border rounded-lg shadow overflow-hidden">
+            <table class="min-w-full divide-y divide-gray-200">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Title</th>
+                  <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Author</th>
+                  <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Availability</th>
+                  <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                <tr v-for="book in books" :key="book.id">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{ book.title }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">{{ book.author }}</td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
+                    {{ book.is_available ? 'Available' : 'Checked Out' }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
+                    <router-link :to="'/books/' + book.id" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800">
+                      View
+                    </router-link>
+                  </td>
+                </tr>
+                <tr v-if="books.length === 0">
+                  <td colspan="4" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800">No books available.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
   </template>
   
@@ -40,5 +67,9 @@
   };
   </script>
   
-
+  <style scoped>
+  .container {
+    max-width: 800px;
+  }
+  </style>
   
