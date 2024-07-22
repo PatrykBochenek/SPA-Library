@@ -27,6 +27,16 @@ class BookViewSet(viewsets.ModelViewSet):
         book.save() 
 
         return Response({'detail': 'Book checked out successfully.'}, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['post'])
+    def uncheckout(self, request, pk=None):
+        book = self.get_object()
+        if book.is_available:
+            return Response({'error': 'Book is not checked out'}, status=status.HTTP_400_BAD_REQUEST)
+        book.is_available = True
+        book.readers.clear()
+        book.save()
+        return Response({'status': 'Book unchecked out'}, status=status.HTTP_200_OK)
 
 class ReaderViewSet(viewsets.ModelViewSet):
     queryset = Reader.objects.all()

@@ -26,8 +26,10 @@
           <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Check Out</button>
         </form>
       </div>
+  
       <div v-else>
-        <p>This book is currently checked out.</p>
+        <h2 class="text-xl font-semibold mb-2">Uncheck Out Book</h2>
+        <button @click="uncheckoutBook" class="bg-red-500 text-white px-4 py-2 rounded">Uncheck Out</button>
       </div>
     </div>
   </template>
@@ -70,9 +72,17 @@
           await axios.post(`http://localhost:8000/api/books/${this.book.id}/checkout/`, {
             reader_id: this.selectedReader
           });
-          await this.fetchBook();  // Refresh the book data after checking out
+          await this.fetchBook(); 
         } catch (error) {
           console.error('Error checking out book:', error);
+        }
+      },
+      async uncheckoutBook() {
+        try {
+          await axios.post(`http://localhost:8000/api/books/${this.book.id}/uncheckout/`);
+          await this.fetchBook(); 
+        } catch (error) {
+          console.error('Error unchecking out book:', error);
         }
       }
     }
