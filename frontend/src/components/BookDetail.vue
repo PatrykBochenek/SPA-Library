@@ -3,6 +3,7 @@
       <h1 class="text-2xl font-bold mb-4">{{ book.title }}</h1>
       <p class="mb-2"><strong>Author:</strong> {{ book.author }}</p>
       <p class="mb-4"><strong>Status:</strong> {{ book.is_available ? 'Available' : 'Checked out' }}</p>
+      <p v-if="book.expiration_date"><strong>Expiration Date:</strong> {{ new Date(book.expiration_date).toLocaleDateString() }}</p>
   
       <h2 class="text-xl font-semibold mb-2">Readers Who Have Taken Out This Book:</h2>
       <ul class="list-disc pl-5 mb-4">
