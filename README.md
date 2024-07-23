@@ -29,7 +29,7 @@ This is a Single Page Application (SPA) for managing a library's books and reade
 
 1. **Clone the repository**:
     ```sh
-    git clone https://github.com/your-username/library-app.git](https://github.com/PatrykBochenek/SPA-Library.git
+    git clone https://github.com/PatrykBochenek/SPA-Library.git
     cd spa-library
     ```
 
