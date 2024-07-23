@@ -17,15 +17,19 @@
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
                     <ul class="list-disc pl-5">
                       <li v-for="book in reader.books_taken" :key="book.id" class="mb-2">
-                        <a @click.prevent="viewBook(book.id)" href="#" class="text-blue-600 hover:text-blue-800">
-                          {{ book.title }}
+                        <a @click="viewBook(book.id)" href="#" class="text-blue-600 hover:text-blue-800">
+                          {{ book.title }} - Expires: {{ new Date(book.expiration_date).toLocaleDateString() }}
                         </a>
                       </li>
+                      <li v-if="reader.books_taken.length === 0">No books taken out yet.</li>
                     </ul>
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                     <button @click="viewReader(reader.id)" type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none">View</button>
                   </td>
+                </tr>
+                <tr v-if="readers.length === 0">
+                  <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800">No readers available.</td>
                 </tr>
               </tbody>
             </table>
