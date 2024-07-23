@@ -1,41 +1,50 @@
 <template>
-    <div class="flex flex-col">
-      <div class="-m-1.5 overflow-x-auto">
-        <div class="p-1.5 min-w-full inline-block align-middle">
-          <div class="border rounded-lg shadow overflow-hidden">
-            <table class="min-w-full divide-y divide-gray-200">
-              <thead class="bg-gray-50">
-                <tr>
-                  <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Name</th>
-                  <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Books Taken</th>
-                  <th scope="col" class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase">Action</th>
-                </tr>
-              </thead>
-              <tbody class="divide-y divide-gray-200">
-                <tr v-for="reader in readers" :key="reader.id">
-                  <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{ reader.name }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                    <ul class="list-disc pl-5">
-                      <li v-for="book in reader.books_taken" :key="book.id" class="mb-2">
-                        <a @click="viewBook(book.id)" href="#" class="text-blue-600 hover:text-blue-800">
-                          {{ book.title }} - Expires: {{ new Date(book.expiration_date).toLocaleDateString() }}
-                        </a>
-                      </li>
-                      <li v-if="reader.books_taken.length === 0">No books taken out yet.</li>
-                    </ul>
-                  </td>
-                  <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
-                    <button @click="viewReader(reader.id)" type="button" class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800 disabled:opacity-50 disabled:pointer-events-none">View</button>
-                  </td>
-                </tr>
-                <tr v-if="readers.length === 0">
-                  <td colspan="3" class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800">No readers available.</td>
-                </tr>
-              </tbody>
-            </table>
+    <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
+
+      <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
+        <h2 class="text-2xl font-bold md:text-4xl md:leading-tight">Reader List</h2>
+        <p class="mt-1 text-gray-600">Browse through our list of readers and their borrowed books.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <a
+          v-for="reader in readers"
+          :key="reader.id"
+          @click="viewReader(reader.id)"
+          href="#"
+          class="block border border-gray-200 rounded-lg hover:shadow-sm focus:outline-none cursor-pointer"
+        >
+          <div class="relative flex items-center overflow-hidden p-4">
+
+            <img
+              class="w-16 h-16 rounded-full border border-gray-200"
+              :src="`https://api.dicebear.com/9.x/fun-emoji/svg?seed=${reader.id}`"
+              alt="Reader Avatar"
+            />
+  
+            <div class="grow ms-4">
+              <div class="flex flex-col justify-center min-h-[4rem]">
+                <h3 class="font-semibold text-sm text-gray-800">{{ reader.name }}</h3>
+                <div class="mt-1 text-sm text-gray-500">
+                  <strong>Books Taken:</strong>
+                  <ul class="list-disc pl-5 mt-1">
+                    <li v-for="book in reader.books_taken" :key="book.id">
+                      <router-link :to="'/books/' + book.id">{{ book.title }}</router-link>
+                    </li>
+                    <li v-if="reader.books_taken.length === 0">No books taken out yet.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
+        </a>
+
+        <div v-if="readers.length === 0" class="col-span-full text-center text-gray-600">
+          <p>No readers available.</p>
         </div>
       </div>
+      
     </div>
   </template>
   
@@ -65,9 +74,6 @@
       },
       viewReader(readerId) {
         this.$router.push(`/readers/${readerId}`);
-      },
-      viewBook(bookId) {
-        this.$router.push(`/books/${bookId}`);
       }
     },
     created() {

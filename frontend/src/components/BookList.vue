@@ -1,128 +1,80 @@
 <template>
-  <div class="flex flex-col">
-    <div class="-m-1.5 overflow-x-auto">
-      <div class="p-1.5 min-w-full inline-block align-middle">
-        <div class="border rounded-lg shadow overflow-hidden">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
-                >
-                  Title
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
-                >
-                  Author
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
-                >
-                  Availability
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase"
-                >
-                  Taken Out By
-                </th>
-                <th
-                  scope="col"
-                  class="px-6 py-3 text-end text-xs font-medium text-gray-500 uppercase"
-                >
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-200">
-              <tr v-for="book in books" :key="book.id">
-                <td
-                  class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800"
-                >
-                  {{ book.title }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {{ book.author }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  {{ book.is_available ? "Available" : "Checked Out" }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800">
-                  <span v-if="book.readers.length > 0">
-                    <router-link
-                      :to="'/readers/' + book.readers[0].id"
-                      class="text-blue-600 hover:text-blue-800"
-                    >
-                      {{ book.readers[0].name }}
-                    </router-link>
-                  </span>
-                  <span v-else> N/A </span>
-                </td>
+    <div class="max-w-[85rem] px-4 py-10 sm:px-6 lg:px-8 lg:py-14 mx-auto">
 
-                <td
-                  class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium"
+      <div class="max-w-2xl mx-auto text-center mb-10 lg:mb-14">
+        <h2 class="text-2xl font-bold md:text-4xl md:leading-tight">Book List</h2>
+        <p class="mt-1 text-gray-600">Explore our collection of books and find your next great read.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <a
+          v-for="book in books"
+          :key="book.id"
+          :href="'/books/' + book.id"
+          class="block border border-gray-200 rounded-lg hover:shadow-sm focus:outline-none"
+        >
+          <div class="relative flex items-center overflow-hidden">
+
+            <img
+              class="w-32 sm:w-48 h-full absolute inset-0 object-cover rounded-s-lg"
+              :src="book.cover_image || 'https://images.pexels.com/photos/4238507/pexels-photo-4238507.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'"
+              alt="Book Cover"
+            />
+  
+            <div class="grow p-4 ms-32 sm:ms-48">
+              <div class="min-h-24 flex flex-col justify-center">
+                <h3 class="font-semibold text-sm text-gray-800">{{ book.title }}</h3>
+                <p class="mt-1 text-sm text-gray-500">By {{ book.author }}</p>
+                <p
+                  class="mt-1 text-sm"
+                  :class="{
+                    'text-green-600': book.is_available,
+                    'text-red-600': !book.is_available
+                  }"
                 >
-                  <router-link
-                    :to="'/books/' + book.id"
-                    class="inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 focus:outline-none focus:text-blue-800"
-                  >
-                    View
-                  </router-link>
-                </td>
-              </tr>
-              <tr v-if="books.length === 0">
-                <td
-                  colspan="4"
-                  class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-800"
-                >
-                  No books available.
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  {{ book.is_available ? 'Available' : 'Checked Out' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <div v-if="books.length === 0" class="col-span-full text-center text-gray-600">
+          <p>No books available.</p>
         </div>
       </div>
     </div>
-  </div>
-</template>
-
-<script>
-import axios from "axios";
-
-const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000/api",
-  timeout: 1000,
-});
-
-export default {
-  name: "BookList",
-  data() {
-    return {
-      books: [],
-    };
-  },
-  methods: {
-    async fetchBooks() {
-      try {
-        const response = await axiosInstance.get("/books/");
-        this.books = response.data;
-      } catch (error) {
-        console.error("Error fetching books:", error);
-      }
+  </template>
+  
+  <script>
+  import axios from 'axios';
+  
+  const axiosInstance = axios.create({
+    baseURL: 'http://localhost:8000/api',
+    timeout: 1000,
+  });
+  
+  export default {
+    name: 'BookList',
+    data() {
+      return {
+        books: [],
+      };
     },
-  },
-  created() {
-    this.fetchBooks();
-  },
-};
-</script>
-
-<style scoped>
-.container {
-  max-width: 800px;
-}
-</style>
+    methods: {
+      async fetchBooks() {
+        try {
+          const response = await axiosInstance.get('/books/');
+          this.books = response.data;
+        } catch (error) {
+          console.error('Error fetching books:', error);
+        }
+      },
+    },
+    created() {
+      this.fetchBooks();
+    },
+  };
+  </script>
+ 
